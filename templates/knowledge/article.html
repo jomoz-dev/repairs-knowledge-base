@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — Repairs Knowledge Base{% endblock %}
+{% block content %}
+<p class="crumb">
+    <a href="{% url 'home' %}">Home</a> /
+    <a href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
+</p>
+<article class="card wide">
+    <p class="pills">
+        <span class="pill">{{ article.get_audience_display }}</span>
+        <span class="pill priority-{{ article.related_priority }}">{{ article.get_related_priority_display }}</span>
+    </p>
+    <h1>{{ article.title }}</h1>
+    <p class="lede">{{ article.summary }}</p>
+    {% for paragraph in article.body_paragraphs %}
+    <p>{{ paragraph }}</p>
+    {% endfor %}
+    <p class="meta">Updated {{ article.updated_at|date:"d M Y" }}</p>
+</article>
+{% if related %}
+<h2>Also in {{ article.category.name }}</h2>
+<ul class="article-list">
+    {% for item in related %}
+    <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

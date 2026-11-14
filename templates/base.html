@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Repairs Knowledge Base{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="{% url 'home' %}">Repairs Knowledge Base</a>
+        {% if user.is_authenticated %}
+        <form class="search-form" method="get" action="{% url 'search' %}">
+            <label class="sr-only" for="q">Search</label>
+            <input id="q" type="text" name="q" value="{{ query|default:'' }}" placeholder="Search procedures…">
+            <button type="submit">Search</button>
+        </form>
+        <nav class="user-nav">
+            {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}">Admin</a>
+            {% endif %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="linkish" type="submit">Sign out</button>
+            </form>
+        </nav>
+        {% endif %}
+    </div>
+    {% if user.is_authenticated and nav_categories %}
+    <nav class="cat-nav">
+        {% for category in nav_categories %}
+        <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+        {% endfor %}
+    </nav>
+    {% endif %}
+</header>
+<main class="page">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

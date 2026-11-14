@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Repairs Knowledge Base{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>Repairs Knowledge Base</h1>
+    <p>Sign in to look up advisor procedures and resident guidance by repair type.</p>
+    {% if form.errors %}
+    <p class="error-message">Username or password is not correct.</p>
+    {% endif %}
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <label for="id_username">Username</label>
+        <input id="id_username" type="text" name="username" required>
+        <label for="id_password">Password</label>
+        <input id="id_password" type="password" name="password" required>
+        <button type="submit">Sign in</button>
+    </form>
+    <p class="hint">Demo advisor: <code>advisor</code> / <code>changeme</code>. Content admin: <code>admin</code> / <code>changeme</code>.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} — Repairs Knowledge Base{% endblock %}
+{% block content %}
+<p class="crumb"><a href="{% url 'home' %}">Home</a> / {{ category.name }}</p>
+<h1>{{ category.name }}</h1>
+<p class="lede">{{ category.summary }}</p>
+{% if category.typical_trades %}
+<p class="meta">Typical trades: {{ category.typical_trades }}</p>
+{% endif %}
+
+<ul class="article-list">
+    {% for article in articles %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        <p>{{ article.summary }}</p>
+        <span class="meta">{{ article.get_audience_display }} · {{ article.get_related_priority_display }}</span>
+    </li>
+    {% empty %}
+    <li>No published articles in this category yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

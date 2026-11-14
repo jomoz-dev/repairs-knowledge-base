@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Home — Repairs Knowledge Base{% endblock %}
+{% block content %}
+<h1>Look up the procedure, then log the job</h1>
+<p class="lede">This is the written counterpart of the Housing Repairs Diagnostic Tool. Categories match the six repair types. Use it when an advisor needs the questions, the Emergency / Urgent / Routine rule, or what to tell the resident.</p>
+
+<section class="grid">
+    {% for category in categories %}
+    <a class="tile" href="{{ category.get_absolute_url }}">
+        <h2>{{ category.name }}</h2>
+        <p>{{ category.summary }}</p>
+        {% if category.typical_trades %}
+        <p class="meta">Trade: {{ category.typical_trades }}</p>
+        {% endif %}
+    </a>
+    {% empty %}
+    <p>No categories yet. Run <code>python manage.py seed_knowledge</code>.</p>
+    {% endfor %}
+</section>
+
+{% if recent %}
+<h2>Recently updated</h2>
+<ul class="article-list">
+    {% for article in recent %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        <span class="meta">{{ article.category.name }} · {{ article.get_audience_display }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
