@@ -9,13 +9,25 @@
     <p class="pills">
         <span class="pill">{{ article.get_audience_display }}</span>
         <span class="pill priority-{{ article.related_priority }}">{{ article.get_related_priority_display }}</span>
+        {% if not article.published %}
+        <span class="pill draft">Draft — not issued to advisors</span>
+        {% elif article.review_is_due %}
+        <span class="pill review-due">Review due</span>
+        {% endif %}
     </p>
     <h1>{{ article.title }}</h1>
     <p class="lede">{{ article.summary }}</p>
     {% for paragraph in article.body_paragraphs %}
     <p>{{ paragraph }}</p>
     {% endfor %}
-    <p class="meta">Updated {{ article.updated_at|date:"d M Y" }}</p>
+    <p class="meta">
+        {% if article.reviewed_on %}
+        Last reviewed {{ article.reviewed_on|date:"d M Y" }}{% if article.reviewed_by %} by {{ article.reviewed_by }}{% endif %}.
+        {% else %}
+        Not yet reviewed.
+        {% endif %}
+        Record updated {{ article.updated_at|date:"d M Y" }}.
+    </p>
 </article>
 {% if related %}
 <h2>Also in {{ article.category.name }}</h2>

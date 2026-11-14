@@ -17,6 +17,7 @@ It is a portfolio piece for Systems Officer, Application Support and Business An
 - Related priority: Emergency, Urgent, Routine, or depends on answers
 - Search across title, summary and body
 - Django admin for adding and editing articles
+- Document control: last reviewed date, reviewer, unpublished drafts, and a 12-month review-due flag for staff
 - SQLite
 - Seeded starter content and pytest coverage
 

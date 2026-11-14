@@ -99,3 +99,52 @@ def test_seed_covers_advisor_and_resident_for_each_repair_type():
         "finding-the-stopcock",
     ):
         assert Article.objects.filter(slug=slug, published=True).exists()
+
+
+@pytest.fixture
+def coordinator(db):
+    return User.objects.create_user(
+        username="admin", password="changeme", is_staff=True
+    )
+
+
+@pytest.mark.django_db
+def test_draft_hidden_from_advisor_visible_to_staff(client, advisor, coordinator):
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    url = reverse("article_detail", kwargs={"slug": "out-of-hours-briefing-draft"})
+    client.login(username="advisor", password="changeme")
+    assert client.get(url).status_code == 404
+    client.login(username="admin", password="changeme")
+    response = client.get(url)
+    assert response.status_code == 200
+    assert b"Draft" in response.content
+
+
+@pytest.mark.django_db
+def test_article_shows_last_reviewed(client, advisor):
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    client.login(username="advisor", password="changeme")
+    response = client.get(
+        reverse("article_detail", kwargs={"slug": "who-to-send"})
+    )
+    assert b"Last reviewed" in response.content
+    assert b"Housing Repairs Coordinator" in response.content
+
+
+@pytest.mark.django_db
+def test_overdue_review_listed_for_staff_only(client, advisor, coordinator):
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    client.login(username="advisor", password="changeme")
+    home = client.get(reverse("home"))
+    assert b"Review due" not in home.content
+    assert b"Drafts (staff only)" not in home.content
+    client.login(username="admin", password="changeme")
+    staff_home = client.get(reverse("home"))
+    assert b"Communal lighting on the estate" in staff_home.content
+    assert b"Out-of-hours contractor briefing" in staff_home.content

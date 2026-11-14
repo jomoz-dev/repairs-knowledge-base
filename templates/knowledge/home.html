@@ -18,6 +18,33 @@
     {% endfor %}
 </section>
 
+{% if drafts %}
+<h2>Drafts (staff only)</h2>
+<ul class="article-list">
+    {% for article in drafts %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        <span class="meta">{{ article.category.name }} · not issued to advisors</span>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if review_due %}
+<h2>Review due</h2>
+<p class="lede">Published procedures with no review date, or last reviewed more than 12 months ago.</p>
+<ul class="article-list">
+    {% for article in review_due %}
+    <li>
+        <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+        <span class="meta">
+            {% if article.reviewed_on %}Last reviewed {{ article.reviewed_on|date:"d M Y" }}{% else %}Never reviewed{% endif %}
+        </span>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% if recent %}
 <h2>Recently updated</h2>
 <ul class="article-list">

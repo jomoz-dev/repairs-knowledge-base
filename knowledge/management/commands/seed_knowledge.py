@@ -1,7 +1,12 @@
+from datetime import date
+
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from knowledge.models import Article, Category
+
+DEFAULT_REVIEWED_ON = date(2026, 10, 1)
+DEFAULT_REVIEWED_BY = "Housing Repairs Coordinator"
 
 CATEGORIES = [
     {
@@ -334,6 +339,39 @@ You can use a spare room if one window is stuck, as long as the front door still
 
 If glass is broken, keep people and pets away from it. Do not board it yourself unless you already have a safe way to do so; the contractor can make it safe.""",
     },
+    {
+        "category": "electrical",
+        "title": "Communal lighting on the estate",
+        "slug": "communal-lighting",
+        "audience": Article.AUDIENCE_ADVISOR,
+        "related_priority": Article.PRIORITY_ROUTINE,
+        "summary": "Dark communal lights are usually Routine unless they leave a staircase unsafe.",
+        "body": """Ask which block, which floor, and whether the stairs or a fire route are in darkness.
+
+A single lamp out on a landing is Routine, electrician. A whole staircase or exit route in darkness is Urgent because people cannot leave safely.
+
+Record the landlord lighting board location if the resident knows it. Do not send them into a locked riser.
+
+This article is seeded with an overdue review date so document control can be demonstrated.""",
+        "reviewed_on": date(2024, 9, 1),
+        "reviewed_by": "Neighbourhood Officer",
+    },
+    {
+        "category": "call-handling",
+        "title": "Out-of-hours contractor briefing — draft",
+        "slug": "out-of-hours-briefing-draft",
+        "audience": Article.AUDIENCE_ADVISOR,
+        "related_priority": Article.PRIORITY_EMERGENCY,
+        "summary": "Draft script for what to tell the out-of-hours contractor. Not yet reviewed.",
+        "body": """This is an unpublished draft. Advisors should not see it until a coordinator has reviewed it against the current out-of-hours contract.
+
+Intended content: what to read out (address, access, vulnerability, electrical risk) and what not to promise on attendance time.
+
+Keep it unpublished until reviewed_on and reviewed_by are set.""",
+        "published": False,
+        "reviewed_on": None,
+        "reviewed_by": "",
+    },
 ]
 
 
@@ -367,6 +405,9 @@ class Command(BaseCommand):
             category = Category.objects.get(slug=data["category"])
             payload = {k: v for k, v in data.items() if k != "category"}
             payload["category"] = category
-            payload["published"] = True
+            payload.setdefault("published", True)
+            if payload["published"]:
+                payload.setdefault("reviewed_on", DEFAULT_REVIEWED_ON)
+                payload.setdefault("reviewed_by", DEFAULT_REVIEWED_BY)
             Article.objects.update_or_create(slug=data["slug"], defaults=payload)
         self.stdout.write(f"{len(ARTICLES)} articles loaded")

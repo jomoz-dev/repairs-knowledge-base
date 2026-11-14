@@ -17,8 +17,33 @@ class ArticleAdmin(admin.ModelAdmin):
         "audience",
         "related_priority",
         "published",
+        "reviewed_on",
+        "reviewed_by",
         "updated_at",
     )
     list_filter = ("category", "audience", "related_priority", "published")
-    search_fields = ("title", "summary", "body")
+    search_fields = ("title", "summary", "body", "reviewed_by")
     prepopulated_fields = {"slug": ("title",)}
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "category",
+                    "title",
+                    "slug",
+                    "audience",
+                    "related_priority",
+                    "summary",
+                    "body",
+                )
+            },
+        ),
+        (
+            "Document control",
+            {
+                "fields": ("published", "reviewed_on", "reviewed_by"),
+                "description": "Drafts stay unpublished. Last reviewed is what advisors see on the article.",
+            },
+        ),
+    )

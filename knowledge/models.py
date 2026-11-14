@@ -1,5 +1,9 @@
+from datetime import date, timedelta
+
 from django.db import models
 from django.urls import reverse
+
+REVIEW_INTERVAL_DAYS = 365
 
 
 class Category(models.Model):
@@ -56,7 +60,20 @@ class Article(models.Model):
     body = models.TextField(
         help_text="Plain paragraphs. Use a blank line between paragraphs."
     )
-    published = models.BooleanField(default=True)
+    published = models.BooleanField(
+        default=True,
+        help_text="Unpublished articles are drafts. Advisors cannot see them.",
+    )
+    reviewed_on = models.DateField(
+        null=True,
+        blank=True,
+        help_text="Date this procedure was last checked against current policy.",
+    )
+    reviewed_by = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Role or name of the last reviewer, e.g. Housing Repairs Coordinator.",
+    )
     updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -71,3 +88,10 @@ class Article(models.Model):
 
     def body_paragraphs(self):
         return [p.strip() for p in self.body.split("\n\n") if p.strip()]
+
+    def review_is_due(self):
+        if not self.published:
+            return False
+        if not self.reviewed_on:
+            return True
+        return date.today() - self.reviewed_on > timedelta(days=REVIEW_INTERVAL_DAYS)

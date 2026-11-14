@@ -13,7 +13,10 @@
     <li>
         <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
         <p>{{ article.summary }}</p>
-        <span class="meta">{{ article.get_audience_display }} · {{ article.get_related_priority_display }}</span>
+        <span class="meta">
+            {{ article.get_audience_display }} · {{ article.get_related_priority_display }}
+            {% if not article.published %} · Draft{% elif article.review_is_due %} · Review due{% endif %}
+        </span>
     </li>
     {% empty %}
     <li>No published articles in this category yet.</li>
