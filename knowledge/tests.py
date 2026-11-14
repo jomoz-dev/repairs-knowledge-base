@@ -148,3 +148,32 @@ def test_overdue_review_listed_for_staff_only(client, advisor, coordinator):
     staff_home = client.get(reverse("home"))
     assert b"Communal lighting on the estate" in staff_home.content
     assert b"Out-of-hours contractor briefing" in staff_home.content
+
+
+@pytest.mark.django_db
+def test_category_audience_filter(client, advisor):
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    client.login(username="advisor", password="changeme")
+    url = reverse("category_detail", kwargs={"slug": "water-leak"})
+    resident = client.get(url, {"audience": "resident"})
+    assert resident.status_code == 200
+    assert b"Resident: what to do while waiting for a leak" in resident.content
+    assert b"Water leak \xe2\x80\x94 advisor questions" not in resident.content
+    advisor_page = client.get(url, {"audience": "advisor"})
+    assert b"Water leak" in advisor_page.content
+    assert b"advisor questions" in advisor_page.content
+    assert b"Resident: what to do while waiting for a leak" not in advisor_page.content
+
+
+@pytest.mark.django_db
+def test_search_audience_filter(client, advisor):
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    client.login(username="advisor", password="changeme")
+    response = client.get(reverse("search"), {"q": "gas", "audience": "resident"})
+    assert response.status_code == 200
+    assert b"Resident: if you can smell gas" in response.content
+    assert b"not a heating diary job" not in response.content

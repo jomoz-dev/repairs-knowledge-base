@@ -16,6 +16,7 @@ It is a portfolio piece for Systems Officer, Application Support and Business An
 - Articles tagged as advisor procedure or resident guidance
 - Related priority: Emergency, Urgent, Routine, or depends on answers
 - Search across title, summary and body
+- Audience filter on search and category pages (all / advisor procedure / resident guidance)
 - Django admin for adding and editing articles
 - Document control: last reviewed date, reviewer, unpublished drafts, and a 12-month review-due flag for staff
 - SQLite

@@ -13,6 +13,16 @@ def visible_articles(user):
     return articles.filter(published=True)
 
 
+def apply_audience(queryset, request):
+    audience = request.GET.get("audience", "").strip()
+    allowed = {Article.AUDIENCE_ADVISOR, Article.AUDIENCE_RESIDENT}
+    if audience in allowed:
+        queryset = queryset.filter(audience=audience)
+    else:
+        audience = ""
+    return queryset, audience
+
+
 @login_required
 def home(request):
     categories = Category.objects.all()
@@ -46,10 +56,11 @@ def home(request):
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
     articles = visible_articles(request.user).filter(category=category)
+    articles, audience = apply_audience(articles, request)
     return render(
         request,
         "knowledge/category.html",
-        {"category": category, "articles": articles},
+        {"category": category, "articles": articles, "audience": audience},
     )
 
 
@@ -73,16 +84,19 @@ def article_detail(request, slug):
 @login_required
 def search(request):
     query = request.GET.get("q", "").strip()
-    results = Article.objects.none()
+    results = visible_articles(request.user)
     if query:
-        results = visible_articles(request.user).filter(
+        results = results.filter(
             Q(title__icontains=query)
             | Q(summary__icontains=query)
             | Q(body__icontains=query)
             | Q(category__name__icontains=query)
         )
+    results, audience = apply_audience(results, request)
+    if not query and not audience:
+        results = Article.objects.none()
     return render(
         request,
         "knowledge/search.html",
-        {"query": query, "results": results},
+        {"query": query, "results": results, "audience": audience},
     )

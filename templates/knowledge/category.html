@@ -8,6 +8,8 @@
 <p class="meta">Typical trades: {{ category.typical_trades }}</p>
 {% endif %}
 
+{% include "knowledge/_audience_filter.html" %}
+
 <ul class="article-list">
     {% for article in articles %}
     <li>
@@ -19,7 +21,7 @@
         </span>
     </li>
     {% empty %}
-    <li>No published articles in this category yet.</li>
+    <li>{% if audience %}No {{ audience }} articles in this category.{% else %}No published articles in this category yet.{% endif %}</li>
     {% endfor %}
 </ul>
 {% endblock %}

@@ -1,0 +1,5 @@
+<nav class="audience-filter" aria-label="Filter by audience">
+    <a class="{% if not audience %}is-on{% endif %}" href="?{% if query %}q={{ query|urlencode }}{% endif %}">All</a>
+    <a class="{% if audience == 'advisor' %}is-on{% endif %}" href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}audience=advisor">Advisor procedure</a>
+    <a class="{% if audience == 'resident' %}is-on{% endif %}" href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}audience=resident">Resident guidance</a>
+</nav>

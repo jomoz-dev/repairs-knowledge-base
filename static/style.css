@@ -216,6 +216,26 @@ button,
     color: #1a1a1a;
 }
 
+.audience-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 20px;
+}
+
+.audience-filter a {
+    text-decoration: none;
+    border: 1px solid #003366;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.audience-filter a.is-on {
+    background: #003366;
+    color: white;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;

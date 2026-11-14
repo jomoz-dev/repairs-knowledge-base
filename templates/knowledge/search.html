@@ -3,10 +3,11 @@
 {% block content %}
 <h1>Search</h1>
 {% if query %}
-<p class="lede">Results for “{{ query }}”.</p>
+<p class="lede">Results for “{{ query }}”{% if audience %} · {{ audience }}{% endif %}.</p>
 {% else %}
-<p class="lede">Type a repair type, symptom, or rule (for example mould, stopcock, vulnerable).</p>
+<p class="lede">Type a repair type, symptom, or rule (for example mould, stopcock, vulnerable), or filter by audience.</p>
 {% endif %}
+{% include "knowledge/_audience_filter.html" %}
 <ul class="article-list">
     {% for article in results %}
     <li>
