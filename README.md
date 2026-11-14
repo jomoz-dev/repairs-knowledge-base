@@ -11,7 +11,8 @@ It is a portfolio piece for Systems Officer, Application Support and Business An
 ## What this version does
 
 - Sign-in (Django auth)
-- Six repair categories: water leak, electrical, heating, damp and mould, roofing, doors and windows
+- Seven categories: call handling (who to send, gas, stopcock) plus the six repair types
+- Advisor procedure and resident guidance for every repair type
 - Articles tagged as advisor procedure or resident guidance
 - Related priority: Emergency, Urgent, Routine, or depends on answers
 - Search across title, summary and body

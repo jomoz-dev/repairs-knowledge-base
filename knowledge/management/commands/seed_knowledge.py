@@ -5,6 +5,13 @@ from knowledge.models import Article, Category
 
 CATEGORIES = [
     {
+        "name": "Call handling",
+        "slug": "call-handling",
+        "summary": "Who to send, gas emergency, and finding the stopcock before anyone attends.",
+        "typical_trades": "Depends on the defect",
+        "sort_order": 0,
+    },
+    {
         "name": "Water leak",
         "slug": "water-leak",
         "summary": "Active leaks, contained water, and cases where water may have reached electrics.",
@@ -50,21 +57,107 @@ CATEGORIES = [
 
 ARTICLES = [
     {
+        "category": "call-handling",
+        "title": "Who to send — trade and priority at a glance",
+        "slug": "who-to-send",
+        "audience": Article.AUDIENCE_ADVISOR,
+        "related_priority": Article.PRIORITY_MIXED,
+        "summary": "Match the defect to the trade before you raise the works order. Wrong trade means a wasted visit.",
+        "body": """Use this with the diagnostic tool. The questions decide Emergency / Urgent / Routine. This list decides who attends.
+
+Water on sockets, lights or the consumer unit: Plumber / Electrician, Emergency.
+
+Active leak that cannot be contained, or is entering a neighbour: Plumber, Emergency.
+
+Contained leak still running: Plumber, Urgent.
+
+Sparking, burning smell or a hot scorched fitting: Electrician, Emergency.
+
+Whole-property power loss with no burning: Electrician, Urgent. Check whether the neighbour still has power.
+
+Smell of gas: do not book a heating engineer. Give the National Gas Emergency number 0800 111 999 and log that you did.
+
+No heating and a vulnerable resident: Heating Engineer, Emergency.
+
+No heating, or no hot water, without that vulnerability: Heating Engineer, Urgent.
+
+Visible mould with a child under 5, a respiratory condition, or present for more than 28 days: Damp Specialist, Urgent.
+
+Water entering through the roof and wet loft electrics: Roofer, Emergency, and flag electrical risk.
+
+Water entering, or structural roof concern, without wet electrics: Roofer, Urgent.
+
+Door that cannot be secured, or a window that cannot be closed: Locksmith or Joiner, Urgent. After a break-in or a communal door on the latch: Locksmith, Emergency.
+
+If two trades are needed, raise two clear orders rather than one vague job. Record why you chose the trade so the next user can see it.""",
+    },
+    {
+        "category": "call-handling",
+        "title": "Smell of gas — not a heating diary job",
+        "slug": "smell-of-gas",
+        "audience": Article.AUDIENCE_ADVISOR,
+        "related_priority": Article.PRIORITY_EMERGENCY,
+        "summary": "Gas emergency first. Do not send a routine heating engineer until the supply is declared safe.",
+        "body": """If the resident reports a gas smell, treat it as a gas emergency, not a boiler repair.
+
+Give them 0800 111 999 (National Gas Emergency Service). Stay on the line until they confirm they will call, or call with them if they cannot.
+
+Tell them: open windows, do not use light switches or the doorbell if the smell is strong, do not smoke, and turn the gas off at the meter only if they know how and it is safe to reach.
+
+Log the time, the number you gave, and whether they were able to call. Do not raise a heating works order in parallel until the emergency service or network operator says the supply is safe.
+
+Once it is safe, you can log a follow-on heating inspection if the appliance still needs a landlord engineer.""",
+    },
+    {
+        "category": "call-handling",
+        "title": "Resident: if you can smell gas",
+        "slug": "resident-smell-of-gas",
+        "audience": Article.AUDIENCE_RESIDENT,
+        "related_priority": Article.PRIORITY_EMERGENCY,
+        "summary": "Call 0800 111 999. Open windows. Do not use switches if the smell is strong.",
+        "body": """Call the National Gas Emergency Service on 0800 111 999. This is not the same as the repairs line.
+
+Open windows and doors. Do not smoke. Do not use matches. If the smell is strong, avoid light switches and the doorbell.
+
+If you know where the gas meter is and can reach it safely, turn it off. If you cannot find it, wait for the emergency service.
+
+Tell the housing advisor afterwards so they can record that the emergency service was called. A heating engineer should only be booked once the supply is safe.""",
+    },
+    {
+        "category": "call-handling",
+        "title": "Finding the stopcock on the call",
+        "slug": "finding-the-stopcock",
+        "audience": Article.AUDIENCE_ADVISOR,
+        "related_priority": Article.PRIORITY_MIXED,
+        "summary": "Ask the resident to look, do not tell them to force a seized valve, and write the result on the works order.",
+        "body": """On an active leak, ask whether they can find the stopcock. Typical places: under the kitchen sink, in a downstairs cupboard, by the front door, or where the supply enters the property. In flats it may be in a communal cupboard — do not send them into a locked riser.
+
+If they find it, ask them to turn it clockwise to stop the water, then confirm whether the leak has slowed. Record: found / not found / seized / turned.
+
+If it will not move, tell them to stop. A seized stopcock is a job for the plumber, not a resident with a wrench.
+
+Put the result on the works order. A plumber who knows the water is already off brings a different kit from one attending a flood.""",
+    },
+    {
         "category": "water-leak",
         "title": "Water leak — advisor questions and priority",
         "slug": "water-leak-advisor-priority",
         "audience": Article.AUDIENCE_ADVISOR,
         "related_priority": Article.PRIORITY_MIXED,
-        "summary": "What to ask, when it is Emergency, and how to brief the plumber.",
-        "body": """This article is for advisors logging a leak. It matches the diagnostic-tool rules: active leak, whether it is contained, and whether electrics are affected.
+        "summary": "What to ask, when it is Emergency, and how to brief the plumber. Matches the diagnostic-tool rules.",
+        "body": """Ask, in order: Is water still coming through? Can they contain it with a bowl or the stopcock? Has water reached sockets, lights, a consumer unit or a fused spur? Is a neighbour affected?
 
-Ask, in order: Is water still coming through? Can the resident contain it with a bowl or by turning a stopcock? Has water reached sockets, lights, a consumer unit, or a fused spur?
+Water on electrics: Emergency, Plumber / Electrician, attend in hours. Tell the resident not to use those fittings.
 
-If water is on electrics, treat as Emergency and send Plumber / Electrician. Do not tell the resident to keep using those fittings. Advise them to avoid the wet fittings and, if they can do so safely, switch off at the consumer unit.
+Active leak that cannot be contained: Emergency, Plumber.
 
-An uncontained leak (still running, flooding a room, or entering a neighbour) is Emergency even if electrics are dry. A contained drip with no electrical risk is usually Routine inspection, unless the resident is vulnerable and cannot manage the water.
+Active leak that is contained: Urgent, Plumber (not Routine). The water is still running.
 
-On the works order record: location (kitchen, bathroom, ceiling), whether the stopcock was used, and whether a neighbour is affected. That is what the contractor reads on arrival.""",
+No current leak, only a stain or a historic drip: Routine investigation, 28 days, still with a plumber.
+
+On the works order record: room, whether the stopcock was used, neighbour affected, and electrical risk. That is what the contractor reads on arrival.
+
+See also: Finding the stopcock, and Who to send.""",
     },
     {
         "category": "water-leak",
@@ -73,13 +166,13 @@ On the works order record: location (kitchen, bathroom, ceiling), whether the st
         "audience": Article.AUDIENCE_RESIDENT,
         "related_priority": Article.PRIORITY_EMERGENCY,
         "summary": "Stopcock, bowls, electrics, and what not to do before the plumber arrives.",
-        "body": """If water is still running, try the stopcock under the kitchen sink or where the supply enters the property. If you cannot find it, do not force valves.
+        "body": """If water is still running, try the stopcock under the kitchen sink or where the supply enters the property. Turn it clockwise. If it will not move, stop — do not force it.
 
-Catch water with a bowl and empty it. Move furniture and electrics away from the drip. Do not use sockets or lights that have got wet.
+Catch water with a bowl and empty it. Move furniture and plugs away from the drip. Do not use sockets or lights that have got wet.
 
 If water is near the fuse box or sockets, stay away from those fittings and tell the advisor so an electrician can attend with the plumber.
 
-Photograph the leak and the ceiling or floor it is coming through. That helps the contractor see whether the leak has spread since you reported it.""",
+Photograph the leak and the ceiling or floor. That helps the contractor see whether it has spread since you reported it.""",
     },
     {
         "category": "electrical",
@@ -90,13 +183,28 @@ Photograph the leak and the ceiling or floor it is coming through. That helps th
         "summary": "Sparking or a burning smell is Emergency. Power loss still needs a clear record.",
         "body": """Sparking, a burning smell, scorched fittings or a hot socket is Emergency for an electrician. Do not book this as a routine inspection.
 
-Ask whether the resident can smell burning now, whether a breaker keeps tripping, and whether the whole property or one circuit is out.
+Ask whether they can smell burning now, whether a breaker keeps tripping, and whether the whole property or one circuit is out.
 
-Advise the resident not to reset a breaker that has already tripped more than once, and not to use the affected fitting.
+Advise them not to reset a breaker that has already tripped more than once, and not to use the affected fitting.
 
-Power loss with no burning or sparking may still be Urgent if the resident is vulnerable (no lighting, no heating controls, or they cannot leave the property safely). Record which rooms are dark and whether the neighbour still has power — that helps the electrician decide if it is a landlord supply or a network issue.
+Complete power loss with no burning is Urgent. Record which rooms are dark and whether the neighbour still has power — that tells the electrician if it is a landlord supply or a network issue.
 
 Never tell a resident to remove a faceplate or tighten a live connection.""",
+    },
+    {
+        "category": "electrical",
+        "title": "Resident: unsafe electrics and power cuts",
+        "slug": "resident-unsafe-electrics",
+        "audience": Article.AUDIENCE_RESIDENT,
+        "related_priority": Article.PRIORITY_EMERGENCY,
+        "summary": "Do not use a fitting that sparks or smells of burning. One reset only if a breaker has tripped.",
+        "body": """If a socket, switch or light is sparking, hot, or smells of burning, stop using it. If you can do so safely, switch that circuit off at the fuse box. Do not take the faceplate off.
+
+If a breaker keeps tripping, do not keep resetting it. Tell the advisor which rooms went dark.
+
+Check whether a neighbour still has power. If the whole street is out, it may be the network, not a housing repair — still tell the advisor so they can record it.
+
+Use a torch rather than candles if the lights are out, especially if there is also a gas smell.""",
     },
     {
         "category": "heating",
@@ -105,13 +213,30 @@ Never tell a resident to remove a faceplate or tighten a live connection.""",
         "audience": Article.AUDIENCE_ADVISOR,
         "related_priority": Article.PRIORITY_MIXED,
         "summary": "Heating failure plus a vulnerable resident is Emergency. Capture who is in the household.",
-        "body": """Ask: Is the heating off? Is there still hot water? Who lives there (children, older person, someone with a health condition that is made worse by cold)?
+        "body": """Ask: Is the heating off? Is there still hot water? Who lives there (child, older person, someone whose health is made worse by cold)?
 
-Heating failure with a vulnerable resident is Emergency for a heating engineer. Heating failure with no vulnerability is still usually Urgent in cold weather — do not default to Routine 28 days because the boiler is 'just old'.
+No heating and a vulnerable resident: Emergency, Heating Engineer.
 
-Record the boiler make if known, any fault code on the display, and whether the resident has tried the reset once. One reset is enough to ask about; repeated resets can hide an unsafe appliance.
+No heating, or no hot water, without that vulnerability: Urgent, Heating Engineer. Do not default to Routine 28 days because the boiler is 'just old'.
 
-If there is a smell of gas, this is not a heating-engineer diary job. Direct the resident to the gas emergency number and log that you did so. Do not send a routine heating job in parallel until the supply is declared safe.""",
+Record the boiler make if known, any fault code, and whether they have tried the reset once. One reset is enough to ask about.
+
+If there is a smell of gas, this is not a heating-engineer diary job. Use the gas emergency article and 0800 111 999 first.""",
+    },
+    {
+        "category": "heating",
+        "title": "Resident: no heating or hot water",
+        "slug": "resident-no-heating",
+        "audience": Article.AUDIENCE_RESIDENT,
+        "related_priority": Article.PRIORITY_URGENT,
+        "summary": "One reset only. Say who lives in the home. Smell of gas is a different number.",
+        "body": """If the boiler has a reset button, you can try it once. If it fails again, leave it off and tell the advisor the fault code if there is one on the display.
+
+Say if children, an older person, or someone who is unwell lives there. That changes how quickly an engineer should attend.
+
+Use extra bedding and, if it is safe, a room that still has some heat. Do not use outdoor heaters indoors.
+
+If you can smell gas, stop and call 0800 111 999. Do not keep resetting the boiler.""",
     },
     {
         "category": "damp-and-mould",
@@ -120,15 +245,15 @@ If there is a smell of gas, this is not a heating-engineer diary job. Direct the
         "audience": Article.AUDIENCE_ADVISOR,
         "related_priority": Article.PRIORITY_URGENT,
         "summary": "Visible mould with a child under 5, a respiratory condition, or an issue over 28 days is Urgent.",
-        "body": """Do not close damp and mould as 'lifestyle' on the first call. Ask whether mould is visible, how long it has been present, whether anyone in the household is under 5, and whether anyone has asthma or another respiratory condition.
+        "body": """Do not close damp and mould as 'lifestyle' on the first call. Ask whether mould is visible, how long it has been there, whether anyone is under 5, and whether anyone has asthma or another respiratory condition.
 
-Visible mould plus a child under 5, a respiratory condition, or an issue lasting more than 28 days maps to Urgent (7 days) in the diagnostic rules. Treat that as a works order and a case record, not advice to wipe and wait.
+Visible mould plus a child under 5, a respiratory condition, or more than 28 days: Urgent (7 days), Damp Specialist. That is a works order and a case record, not wipe-and-wait.
 
-Capture room, wall or ceiling, size of the patch, and any leak or cold-bridge the resident has already noticed. Photograph requests help the surveyor, but do not delay the job if the resident cannot send a photo.
+Capture room, wall or ceiling, size of the patch, and any leak. Photos help the surveyor; do not delay the job if they cannot send one.
 
-If there is an active leak behind the mould, raise the leak as well so the damp specialist is not sent to a still-wet defect.
+If there is an active leak behind the mould, raise the leak as well so the specialist is not sent to a still-wet defect.
 
-Advisors should record what they told the resident. Later users (housing officer, surveyor, contractor) need to see why the job was Urgent rather than Routine.""",
+Record what you told the resident. Later users need to see why it was Urgent rather than Routine.""",
     },
     {
         "category": "damp-and-mould",
@@ -143,7 +268,7 @@ Open windows when you can, and keep furniture slightly off cold external walls. 
 
 Tell the advisor if a child under 5 lives there, or if anyone has a chest condition. That changes how quickly someone should attend.
 
-If the mould is spreading quickly, or you can see water coming through, report it again as a leak as well as damp.""",
+If the mould is spreading quickly, or you can see water coming through, report it as a leak as well as damp.""",
     },
     {
         "category": "roofing",
@@ -151,14 +276,31 @@ If the mould is spreading quickly, or you can see water coming through, report i
         "slug": "roofing-water-ingress",
         "audience": Article.AUDIENCE_ADVISOR,
         "related_priority": Article.PRIORITY_MIXED,
-        "summary": "Water entering the property or a structural concern is not a 28-day inspection by default.",
-        "body": """Ask whether water is entering the property now, whether ceilings are bowing or debris is falling, and whether electrics in the loft or top floor are wet.
+        "summary": "Water entering the property, or a structural concern, is not a 28-day inspection by default.",
+        "body": """Ask whether water is entering now, whether ceilings are bowing or debris is falling, and whether loft or top-floor electrics are wet.
 
-Water entering the property, or any sign of structural movement, is Emergency or Urgent depending on how fast it is progressing. Wet electrics in the loft follow the same rule as any other leak: Emergency, and flag electrical risk on the order.
+Water in and wet electrics: Emergency, Roofer, and flag electrical risk.
 
-A historic stain with no current ingress can be Routine, but still log the room and when it last ran so the roofer is not sent on a dry day with no information.
+Water entering with dry electrics, or structural concern (loose structure, sagging, falling debris): Urgent, Roofer.
 
-Do not send a resident onto the roof. If they mention loose tiles in the garden, treat that as a safety note for the contractor and for anyone using the path.""",
+A historic stain with no current ingress: Routine, but log the room and when it last ran so the roofer is not sent on a dry day with no information.
+
+Do not send a resident onto the roof. Loose tiles in the garden are a safety note for the path and for the contractor.""",
+    },
+    {
+        "category": "roofing",
+        "title": "Resident: water coming through the roof",
+        "slug": "resident-roof-leak",
+        "audience": Article.AUDIENCE_RESIDENT,
+        "related_priority": Article.PRIORITY_URGENT,
+        "summary": "Catch the water. Stay off the roof. Say if the loft electrics are wet.",
+        "body": """Put a bowl under the drip and move beds or sofas away from a stained ceiling. If the ceiling is bulging, stay out of that room and tell the advisor.
+
+Do not go onto the roof or into a wet loft to investigate.
+
+If lights or sockets on the top floor have got wet, do not use them. Say so on the call so an electrician risk can be flagged with the roofer.
+
+Photograph the stain and the water. That shows whether it has spread before the visit.""",
     },
     {
         "category": "doors-and-windows",
@@ -167,13 +309,30 @@ Do not send a resident onto the roof. If they mention loose tiles in the garden,
         "audience": Article.AUDIENCE_ADVISOR,
         "related_priority": Article.PRIORITY_URGENT,
         "summary": "If the door cannot be secured or the window cannot be closed, do not book Routine.",
-        "body": """Ask: Can the door be locked and left secure? Can the window be closed? Is the resident at home tonight? Has there already been an attempted break-in?
+        "body": """Ask: Can the door be locked and left secure? Can the window be closed? Are they at home tonight? Has there already been a break-in?
 
-A door that cannot be secured, or a window that cannot be closed, is Urgent. A security risk (broken lock after a burglary, or a communal door on the latch) is Emergency.
+Security compromised (broken lock after burglary, communal door on the latch, property cannot be left): Emergency, Locksmith.
 
-Trade is usually locksmith for locks and ironmongery, joiner for frames and glass. Split the order if both are needed rather than sending the wrong trade twice.
+Door that cannot be secured: Urgent, Locksmith.
 
-Record whether a temporary lock, boarding, or a make-safe is enough until a full replacement. That is what the contractor needs to bring.""",
+Window that cannot be closed: Urgent, Joiner.
+
+Split locksmith and joiner if both are needed. Record whether a make-safe, boarding or temporary lock is enough until a full replacement.""",
+    },
+    {
+        "category": "doors-and-windows",
+        "title": "Resident: door or window that will not lock",
+        "slug": "resident-insecure-door-window",
+        "audience": Article.AUDIENCE_RESIDENT,
+        "related_priority": Article.PRIORITY_URGENT,
+        "summary": "Say if you cannot lock up tonight. Do not leave a door on the latch without telling the advisor.",
+        "body": """If the door will not lock, or a window will not close, tell the advisor whether you can stay in the property tonight.
+
+Do not leave the door on the latch and go out. If you have to leave, say so — that is a security risk, not a routine joinery job.
+
+You can use a spare room if one window is stuck, as long as the front door still locks.
+
+If glass is broken, keep people and pets away from it. Do not board it yourself unless you already have a safe way to do so; the contractor can make it safe.""",
     },
 ]
 

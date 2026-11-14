@@ -70,3 +70,32 @@ def test_unpublished_article_is_hidden(client, advisor, article):
     client.login(username="advisor", password="changeme")
     response = client.get(article.get_absolute_url())
     assert response.status_code == 404
+
+
+REPAIR_CATEGORIES = (
+    "water-leak",
+    "electrical",
+    "heating",
+    "damp-and-mould",
+    "roofing",
+    "doors-and-windows",
+)
+
+
+@pytest.mark.django_db
+def test_seed_covers_advisor_and_resident_for_each_repair_type():
+    from django.core.management import call_command
+
+    call_command("seed_knowledge")
+    for slug in REPAIR_CATEGORIES:
+        articles = Article.objects.filter(category__slug=slug, published=True)
+        audiences = set(articles.values_list("audience", flat=True))
+        assert Article.AUDIENCE_ADVISOR in audiences, slug
+        assert Article.AUDIENCE_RESIDENT in audiences, slug
+    for slug in (
+        "who-to-send",
+        "smell-of-gas",
+        "resident-smell-of-gas",
+        "finding-the-stopcock",
+    ):
+        assert Article.objects.filter(slug=slug, published=True).exists()
